@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+echo "== put objects" 
+
+# Exit immediately id any command return a non-zero status
+set -e 
+
+# where we'll store these files
+OUTPUT_DIR="/tmp/s3-bash-scripts"
+
+# remove folder if already exists
+rm -r $OUTPUT_DIR
+
+# lets create output folder
+mkdir -p $OUTPUT_DIR
+
+# generate a random number to determine ghoe many files to create
+NUM_FILES=$((RANDOM % 6 + 5))
+
+for ((i=1; i<=$NUM_FILES; i++)); do
+    # generate a random filename
+    FILENAME="$OUTPUT_DIR/file_$i.txt"
+
+    # generate random data and write it to the file
+    dd if=/dev/urandom of="$FILENAME" bs=1024 count=$((RANDOM % 1024 + 1)) 2>/dev/null
+done
+
+tree $OUTPUT_DIR
